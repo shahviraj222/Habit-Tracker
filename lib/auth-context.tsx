@@ -1,3 +1,49 @@
+// this file is contex
+
+// Context (AuthContext + AuthProvider) → manages state and methods globally and provides them to any component in your app.
+
+// Custom hook (useAuth) → is a convenient, safe way for your components to access that context without repeating useContext(AuthContext) everywhere.
+ 
+
+/* 
+Auth Context + Custom Hook Explained
+
+1.AuthContext
+
+    React Context object.
+
+    Holds the shared state and functions for authentication.
+
+    Doesn’t manage state by itself.
+
+2.AuthProvider
+
+    React component that wraps your app.
+
+    Manages auth state (user, isLoadingUser) with useState.
+
+    Provides auth functions (signUp, signIn, signOut) via the context.
+
+    Any component inside it can access auth data.
+
+3.useAuth
+
+    Custom hook. ✅
+
+    Shortcut for consuming AuthContext.
+
+    Safe: throws error if used outside of AuthProvider.
+
+    Makes accessing auth state in components clean and simple.
+
+4.How they work together
+
+    AuthProvider wraps the app → provides context.
+
+    useAuth() inside a component → reads/writes the context state.
+*/
+
+
 import { createContext, useContext, useEffect, useState } from "react";
 import { ID, Models } from "react-native-appwrite";
 import { account } from "./appwrite";
@@ -80,6 +126,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+// this is custom hook through which we access auth context like functions and data
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
