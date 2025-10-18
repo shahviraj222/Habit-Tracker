@@ -1,7 +1,7 @@
-import { Link } from "expo-router";
-import { Text, View } from "react-native";
+import { View, Text } from 'react-native'
+import React from 'react'
 
-export default function Index() {
+const login = () => {
   return (
     <View
       style={{
@@ -10,7 +10,9 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Index</Text>
+      <Text>Login</Text>
     </View>
-  );
+  )
 }
+
+export default login
