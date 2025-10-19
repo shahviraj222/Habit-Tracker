@@ -1,17 +1,54 @@
+import { DATABASE_ID, databases, HABITS_COLLECTION_ID } from "@/lib/appwrite";
 import { useAuth } from "@/lib/auth-context";
 import { Link } from "expo-router";
-import { Text, View, StyleSheet } from "react-native";
-import { Button } from "react-native-paper";
+import { View, StyleSheet } from "react-native";
+import { Query } from "react-native-appwrite";
+import { Button, Text } from "react-native-paper";
+import { useEffect, useState } from "react";
+import { Habit } from "@/types/database.types";
 
 export default function Index() {
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
+  const [habits, setHabits] = useState<Habit[]>();
+
+  useEffect(() => {
+    fetchHabits();
+  }, [user]);
+
+  const fetchHabits = async () => {
+    try {
+      const response = await databases.listDocuments(
+        DATABASE_ID,
+        HABITS_COLLECTION_ID,
+        [Query.equal("user_id", user?.$id ?? "")]
+      );
+      console.log(response.documents);
+      setHabits(response.documents as Habit[]);
+    } catch (error) {
+      console.log("Error fetching habits:", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text>Index</Text>
-      <Button mode="text" onPress={signOut} icon={"logout"}>
-        SignOut
-      </Button>
+      <View>
+        <Text variant="headlineSmall"> Today's Habits</Text>
+        <Button mode="text" onPress={signOut} icon={"logout"}>
+          Sign Out
+        </Button>
+      </View>
+      {habits?.length === 0 ? (
+        <View>
+          <Text>No habits found. Add one!</Text>
+        </View>
+      ) : (
+        habits?.map((habit, key) => (
+          <View>
+            <Text>{habit.title}</Text>
+            <Text>{habit.description}</Text>
+          </View>
+        ))
+      )}
     </View>
   );
 }
