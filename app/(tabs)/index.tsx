@@ -1,18 +1,17 @@
 import { useAuth } from "@/lib/auth-context";
 import { Link } from "expo-router";
-import { Text, View,StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 
-
 export default function Index() {
-
-  const {signOut} = useAuth();
+  const { signOut } = useAuth();
 
   return (
-    <View
-      style={styles.container} >
+    <View style={styles.container}>
       <Text>Index</Text>
-      <Button mode="text" onPress={signOut} icon={"logout"}>SignOut</Button>
+      <Button mode="text" onPress={signOut} icon={"logout"}>
+        SignOut
+      </Button>
     </View>
   );
 }
