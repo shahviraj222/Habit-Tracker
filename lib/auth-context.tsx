@@ -59,10 +59,8 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(
-    null
-  );
 
+  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState<boolean>(true);
 
   useEffect(() => {
@@ -93,6 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return "An error occured during signup";
     }
   };
+
   const signIn = async (email: string, password: string) => {
     try {
       await account.createEmailPasswordSession(email, password);
@@ -108,14 +107,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signOut = async () => {
-    try {
-      await account.deleteSession("current");
-      setUser(null);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const signOut = async () => {
+  try {
+    await account.deleteSessions();
+    setUser(null);
+  } catch (error) {
+    console.log("Sign-out (all) error:", error);
+  }
+};
+
 
   return (
     <AuthContext.Provider
